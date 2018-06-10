@@ -1,0 +1,34 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_thsirts"
+            android:checked="true"
+            android:icon="@drawable/ic_home_24dp"
+            android:title="Camisetas" />
+        <item
+            android:id="@+id/drawer_shirts"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Camisas" />
+
+        <item
+            android:id="@+id/add_jeans"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Pantalones" />
+
+        <item
+            android:id="@+id/nav_jumpers"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Sudaderas" />
+
+    </group>
+
+    <item android:title="Accesorios">
+        <menu>
+            <item
+                android:id="@+id/nav_bags"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Bolsos" />
+        </menu>
+    </item>
+
+</menu>
