@@ -79,6 +79,7 @@ public class NewGarmentActivity extends AppCompatActivity {
     private static final String IMAGE_DIRECTORY_NAME = "My Smart Wardrobe";
 
     private Uri fileUri; // file url to store image/video
+    File file;
 
     private ImageView imgPreview; // img preview
 
@@ -176,7 +177,6 @@ public class NewGarmentActivity extends AppCompatActivity {
                 // If response is OK, will get the needed data, and call the method for creating a new garment.
                 if (response.isSuccessful()) {
                     String name = textName.getText().toString().trim();
-                    String photo = fileUri.toString();
                     String category = spinnerCategory.getSelectedItem().toString();
                     String season = spinnerSeason.getSelectedItem().toString();
                     String price = textPrice.getText().toString().trim();
@@ -184,7 +184,7 @@ public class NewGarmentActivity extends AppCompatActivity {
                     String size = spinnerSize.getSelectedItem().toString();
                     String brand = textBrand.getText().toString().trim();
 
-                    createNewGarment(name, photo, category, season, price, color, size, brand);
+                    createNewGarment(name, file, category, season, price, color, size, brand);
 
                 }
             }
@@ -201,7 +201,7 @@ public class NewGarmentActivity extends AppCompatActivity {
                 String size = spinnerSize.getSelectedItem().toString();
                 String brand = textBrand.getText().toString().trim();
 
-                createNewGarment(name, photo, category, season, price, color, size, brand);
+                createNewGarment(name, file, category, season, price, color, size, brand);
 
             }
         });
@@ -222,7 +222,7 @@ public class NewGarmentActivity extends AppCompatActivity {
      * @param size     user has chosen.
      * @param brand    user has created.
      */
-    public void createNewGarment(String name, String photo, String category, String season, String price,
+    public void createNewGarment(String name, File photo, String category, String season, String price,
                                  String color, String size, String brand) {
 
         // Declare new Gson
@@ -484,13 +484,13 @@ public class NewGarmentActivity extends AppCompatActivity {
 
     private void uploadPicture() {
 
-        File file = new File(fileUri.getPath());
+        file = new File(fileUri.getPath());
 
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
 
-            Log.d("THIS", fileUri.getPath());
+        Log.d("THIS", fileUri.getPath());
 
         retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(body, name);
         req.enqueue(new Callback<ResponseBody>() {

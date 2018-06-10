@@ -4,6 +4,7 @@ import com.soft.morales.mysmartwardrobe.model.Garment;
 import com.soft.morales.mysmartwardrobe.model.Look;
 import com.soft.morales.mysmartwardrobe.model.User;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public interface APIService {
     @FormUrlEncoded
     Call<Garment> createGarment(
             @Field("name") String name,
-            @Field("photo") String photo,
+            @Field("photo") File photo,
             @Field("category") String category,
             @Field("season") String season,
             @Field("price") String price,

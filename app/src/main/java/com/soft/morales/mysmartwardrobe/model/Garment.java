@@ -3,6 +3,8 @@ package com.soft.morales.mysmartwardrobe.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
+
 public class Garment {
 
     // Garment attributes variables
@@ -14,7 +16,7 @@ public class Garment {
     private String name;
     @SerializedName("photo")
     @Expose
-    private String photo;
+    private File photo;
     @SerializedName("category")
     @Expose
     private String category;
@@ -47,7 +49,7 @@ public class Garment {
         this.brand = garment.brand;
     }
 
-    public Garment(String name, String photo, String category, String brand) {
+    public Garment(String name, File photo, String category, String brand) {
         this.name = name;
         this.photo = photo;
         this.category = category;
@@ -72,11 +74,11 @@ public class Garment {
         this.name = name;
     }
 
-    public String getPhoto() {
+    public File getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(File photo) {
         this.photo = photo;
     }
 

@@ -200,7 +200,7 @@ public class MyClosetTabFragment extends Fragment {
             Intent intent = new Intent(getActivity(), NewLookActivity.class);
             Bundle bundle = new Bundle();
 
-            bundle.putString("Foto", garment.getPhoto());
+            bundle.putString("Foto", garment.getPhoto().getPath());
 
             if (pos == 1 || pos == 3 || pos == 4) {
                 bundle.putString("garmentType", "Shirt");
@@ -232,7 +232,7 @@ public class MyClosetTabFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("ID", garment.getId());
             bundle.putString("Nombre", garment.getName());
-            bundle.putString("Foto", garment.getPhoto());
+            bundle.putString("Foto", garment.getPhoto().getPath());
             bundle.putString("Categoria", garment.getCategory());
             bundle.putString("Temporada", garment.getSeason());
             bundle.putString("Precio", garment.getPrice());
