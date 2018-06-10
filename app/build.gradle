@@ -67,7 +67,7 @@ dependencies {
 
     implementation 'com.applandeo:material-calendar-view:1.4.0'
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
 
 }

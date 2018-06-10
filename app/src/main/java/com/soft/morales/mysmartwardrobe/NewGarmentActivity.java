@@ -91,6 +91,8 @@ public class NewGarmentActivity extends AppCompatActivity {
 
     private APIService mAPIService;
 
+    private APIService service;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +106,7 @@ public class NewGarmentActivity extends AppCompatActivity {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-        mAPIService = new Retrofit.Builder().baseUrl("http://52.47.130.162/Project/").client(client).build().create(APIService.class);
+        service = new Retrofit.Builder().baseUrl("http://52.47.130.162/Project/").client(client).build().create(APIService.class);
 
         // Method that'll set up our toolbar.
         setupToolbar();
@@ -490,7 +492,7 @@ public class NewGarmentActivity extends AppCompatActivity {
 
             Log.d("THIS", fileUri.getPath());
 
-        retrofit2.Call<okhttp3.ResponseBody> req = mAPIService.postImage(body, name);
+        retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(body, name);
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
