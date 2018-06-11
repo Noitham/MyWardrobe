@@ -45,11 +45,12 @@ public interface APIService {
     Call<List<Look>> getLooks(@QueryMap Map<String, String> options);
 
     // Create a new garment by the given parameters
+    @Multipart
     @POST("garments/")
     @FormUrlEncoded
     Call<Garment> createGarment(
             @Field("name") String name,
-            @Field("photo") File photo,
+            @Part MultipartBody.Part image, @Part("name") RequestBody nameImage,
             @Field("category") String category,
             @Field("season") String season,
             @Field("price") String price,
@@ -91,7 +92,15 @@ public interface APIService {
 
     // For uploading picture
     @Multipart
-    @POST("/")
-    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("name") RequestBody name);
+    @POST("garments/")
+    Call<ResponseBody> postImage(@Part("name") String name,
+                                 @Part MultipartBody.Part image, @Part("name") RequestBody nameImage,
+                                 @Part("category") String category,
+                                 @Part("season") String season,
+                                 @Part("price") String price,
+                                 @Part("username") String username,
+                                 @Part("color") String color,
+                                 @Part("size") String size,
+                                 @Part("brand") String brand);
 
 }

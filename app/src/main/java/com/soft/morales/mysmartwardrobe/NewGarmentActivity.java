@@ -67,6 +67,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewGarmentActivity extends AppCompatActivity {
 
@@ -102,12 +103,11 @@ public class NewGarmentActivity extends AppCompatActivity {
 
 
         // UPLOAD PICTURE TO SERVER
-
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-        service = new Retrofit.Builder().baseUrl("http://52.47.130.162/Project/").client(client).build().create(APIService.class);
+        service = new Retrofit.Builder().baseUrl("http://52.47.130.162/Project/").addConverterFactory(GsonConverterFactory.create()).client(client).build().create(APIService.class);
 
         // Method that'll set up our toolbar.
         setupToolbar();
@@ -176,6 +176,7 @@ public class NewGarmentActivity extends AppCompatActivity {
 
                 // If response is OK, will get the needed data, and call the method for creating a new garment.
                 if (response.isSuccessful()) {
+
                     String name = textName.getText().toString().trim();
                     String category = spinnerCategory.getSelectedItem().toString();
                     String season = spinnerSeason.getSelectedItem().toString();
@@ -184,7 +185,7 @@ public class NewGarmentActivity extends AppCompatActivity {
                     String size = spinnerSize.getSelectedItem().toString();
                     String brand = textBrand.getText().toString().trim();
 
-                    createNewGarment(name, file, category, season, price, color, size, brand);
+                    createNewGarment(name, category, season, price, color, size, brand);
 
                 }
             }
@@ -192,8 +193,10 @@ public class NewGarmentActivity extends AppCompatActivity {
             // Getting sure it's crating the new garment.
             @Override
             public void onFailure(Call<Garment> call, Throwable t) {
+
+                file = new File(fileUri.getPath());
+
                 String name = textName.getText().toString().trim();
-                String photo = fileUri.toString();
                 String category = spinnerCategory.getSelectedItem().toString();
                 String season = spinnerSeason.getSelectedItem().toString();
                 String price = textPrice.getText().toString().trim();
@@ -201,7 +204,7 @@ public class NewGarmentActivity extends AppCompatActivity {
                 String size = spinnerSize.getSelectedItem().toString();
                 String brand = textBrand.getText().toString().trim();
 
-                createNewGarment(name, file, category, season, price, color, size, brand);
+                createNewGarment(name, category, season, price, color, size, brand);
 
             }
         });
@@ -214,7 +217,6 @@ public class NewGarmentActivity extends AppCompatActivity {
      * Data user has entered will need to be validated first.
      *
      * @param name     user has entered.
-     * @param photo    user has taken.
      * @param category user has chosen.
      * @param season   user has chosen.
      * @param price    user has entered.
@@ -222,7 +224,7 @@ public class NewGarmentActivity extends AppCompatActivity {
      * @param size     user has chosen.
      * @param brand    user has created.
      */
-    public void createNewGarment(String name, File photo, String category, String season, String price,
+    public void createNewGarment(String name, String category, String season, String price,
                                  String color, String size, String brand) {
 
         // Declare new Gson
@@ -233,18 +235,29 @@ public class NewGarmentActivity extends AppCompatActivity {
         // We build a User from our given information from the sharedPref file (User in Gson format)
         User user = gson.fromJson(sharedPref.getString("user", ""), User.class);
 
-        mAPIService.createGarment(name, photo, category, season, price, user.getEmail(), color, size, brand).enqueue(new Callback<Garment>() {
+
+        file = new File(fileUri.getPath());
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+        RequestBody nameImage = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
+
+
+        retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(name, body, nameImage, category, season, price, user.getEmail(), color, size, brand);
+
+        req.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Garment> call, Response<Garment> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 // When the response is successful, we'll finish the activity.
                 if (response.isSuccessful()) {
                     finish();
                 }
+
             }
 
             @Override
-            public void onFailure(Call<Garment> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d("Error", "Unable to submit post to API.");
                 isUploading = false;
             }
@@ -466,7 +479,7 @@ public class NewGarmentActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // successfully captured the image
                 // display it in image view
-                uploadPicture();
+                //uploadPicture();
                 previewCapturedImage();
             } else if (resultCode == RESULT_CANCELED) {
                 // user cancelled Image capture
@@ -482,28 +495,28 @@ public class NewGarmentActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadPicture() {
-
-        file = new File(fileUri.getPath());
-
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
-
-        Log.d("THIS", fileUri.getPath());
-
-        retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(body, name);
-        req.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
+    /**
+     * private void uploadPicture() {
+     * <p>
+     * file = new File(fileUri.getPath());
+     * <p>
+     * RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+     * MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+     * RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
+     * <p>
+     * Log.d("THIS", fileUri.getPath());
+     * <p>
+     * retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(body, name);
+     * req.enqueue(new Callback<ResponseBody>() {
+     *
+     * @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+     * }
+     * @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+     * t.printStackTrace();
+     * }
+     * });
+     * }
+     */
 
     /*
      * Display image from a path to ImageView
