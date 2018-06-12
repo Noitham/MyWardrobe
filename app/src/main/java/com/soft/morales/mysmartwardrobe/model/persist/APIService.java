@@ -78,7 +78,9 @@ public interface APIService {
     @POST("looks/")
     @FormUrlEncoded
     Call<Look> createLook(
-            @Field("garment_id") List<Integer> garment_id,
+            @Field("torso_id") Integer torso_id,
+            @Field("piernas_id") Integer piernas_id,
+            @Field("pies_id") Integer pies_id,
             @Field("username") String username,
             @Field("date") String date);
 

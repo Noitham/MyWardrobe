@@ -379,7 +379,7 @@ public class NewLookActivity extends AppCompatActivity {
             // Once we've obtained 3 different garments into our List of URI's, we'll send the cretelook post.
             if (myGarments.size() == 3) {
 
-                Log.d("lista",myGarments.toString());
+                Log.d("lista", myGarments.toString());
 
                 // Declare new Gson
                 Gson gson = new Gson();
@@ -397,8 +397,12 @@ public class NewLookActivity extends AppCompatActivity {
                 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                 String formattedDate = df.format(c);
 
+                Integer torso_id = myGarments.get(0);
+                Integer piernas_id = myGarments.get(1);
+                Integer pies_id = myGarments.get(2);
+
                 // Finally, when we have all the required data, we'll send the POST.
-                mAPIService.createLook(myGarments, user.getEmail(), formattedDate).enqueue(new Callback<Look>() {
+                mAPIService.createLook(torso_id, piernas_id, pies_id, user.getEmail(), formattedDate).enqueue(new Callback<Look>() {
                     @Override
                     public void onResponse(Call<Look> call, Response<Look> response) {
 

@@ -145,11 +145,11 @@ public class CardActivity extends AppCompatActivity {
 
                 for (int j = 0; j < looks.size(); j++) {
 
-                    if (looks.get(j).getGarmentsIds().size() == 3) {
+                    if (looks.get(j).getPiernas_id() != null && looks.get(j).getTorso_id() != null && looks.get(j).getPies_id() != null) {
 
-                        int id1 = looks.get(j).getGarmentsIds().get(0);
-                        int id2 = looks.get(j).getGarmentsIds().get(1);
-                        int id3 = looks.get(j).getGarmentsIds().get(2);
+                        int id1 = looks.get(j).getTorso_id();
+                        int id2 = looks.get(j).getPiernas_id();
+                        int id3 = looks.get(j).getPies_id();
 
                         if (garmentId == id1
                                 || garmentId == id2

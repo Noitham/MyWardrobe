@@ -119,16 +119,16 @@ public class CheckLookActivity extends AppCompatActivity {
                 looks = response.body();
 
                 // If we obtain the needed garments, we'll start making the other needed calls for obtaining the garments.
-                if (looks.size() > 0 && looks.get(0).getGarmentsIds().size() == 3) {
+                if (looks.size() > 0) {
                     look = looks.get(0);
 
-                    Call<Garment> call1 = mAPIService.getGarment(look.getGarmentsIds().get(0));
-                    Call<Garment> call2 = mAPIService.getGarment(look.getGarmentsIds().get(1));
-                    Call<Garment> call3 = mAPIService.getGarment(look.getGarmentsIds().get(2));
+                    Call<Garment> call1 = mAPIService.getGarment(look.getTorso_id());
+                    Call<Garment> call2 = mAPIService.getGarment(look.getPiernas_id());
+                    Call<Garment> call3 = mAPIService.getGarment(look.getPies_id());
 
-                    query1.put("id", look.getGarmentsIds().get(0));
-                    query2.put("id", look.getGarmentsIds().get(1));
-                    query3.put("id", look.getGarmentsIds().get(2));
+                    query1.put("id", look.getTorso_id());
+                    query2.put("id", look.getPiernas_id());
+                    query3.put("id", look.getPies_id());
 
                     call1.enqueue(new Callback<Garment>() {
                         @Override

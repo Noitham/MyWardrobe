@@ -11,9 +11,15 @@ public class Look {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("garment_id")
+    @SerializedName("torso_id")
     @Expose
-    private List<Integer> garment_id;
+    private Integer torso_id;
+    @SerializedName("piernas_id")
+    @Expose
+    private Integer piernas_id;
+    @SerializedName("pies_id")
+    @Expose
+    private Integer pies_id;
     @SerializedName("username")
     @Expose
     private String username;
@@ -27,15 +33,19 @@ public class Look {
 
     }
 
-    public Look(String id, List<Integer> garment_id, String username, String date) {
+    public Look(String id, Integer torso_id, Integer piernas_id, Integer pies_id, String username, String date) {
         this.id = id;
-        this.garment_id = garment_id;
+        this.torso_id = torso_id;
+        this.piernas_id = piernas_id;
+        this.pies_id = pies_id;
         this.username = username;
         this.date = date;
     }
 
-    public Look(List<Integer> garment_id, String username, String date) {
-        this.garment_id = garment_id;
+    public Look(Integer torso_id, Integer piernas_id, Integer pies_id, String username, String date) {
+        this.torso_id = torso_id;
+        this.piernas_id = piernas_id;
+        this.pies_id = pies_id;
         this.username = username;
         this.date = date;
     }
@@ -50,12 +60,28 @@ public class Look {
         this.id = id;
     }
 
-    public List<Integer> getGarmentsIds() {
-        return garment_id;
+    public Integer getTorso_id() {
+        return torso_id;
     }
 
-    public void setGarment_id(List<Integer> garment_id) {
-        this.garment_id = garment_id;
+    public void setTorso_id(Integer torso_id) {
+        this.torso_id = torso_id;
+    }
+
+    public Integer getPiernas_id() {
+        return piernas_id;
+    }
+
+    public void setPiernas_id(Integer piernas_id) {
+        this.piernas_id = piernas_id;
+    }
+
+    public Integer getPies_id() {
+        return pies_id;
+    }
+
+    public void setPies_id(Integer pies_id) {
+        this.pies_id = pies_id;
     }
 
     public String getUsername() {
