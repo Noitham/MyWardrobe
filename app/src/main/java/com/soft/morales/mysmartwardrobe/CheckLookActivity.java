@@ -2,6 +2,7 @@ package com.soft.morales.mysmartwardrobe;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
@@ -76,8 +77,17 @@ public class CheckLookActivity extends AppCompatActivity {
         buttonCreateLook = (android.support.design.widget.FloatingActionButton) findViewById(R.id.addLook);
 
         // We'll hide our buttons in the current activity
-        butonDelete.hide();
         buttonCreateLook.hide();
+
+        // We set the listener to our delete button.
+        butonDelete.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+
+                AlertDialog diaBox = askDelete();
+                diaBox.show();
+            }
+        });
+
 
         mAPIService = ApiUtils.getAPIService();
 
@@ -231,6 +241,68 @@ public class CheckLookActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    /**
+     * Method we call when user clicks over the delete button.
+     * We'll show a Dialog and ask which is his option, dismiss, or delete the current look.
+     * If delete is pressed, we'll clear the human.
+     *
+     * @return myAskDeleteDialog.
+     */
+    private AlertDialog askDelete() {
+
+        AlertDialog myAskDeleteDialog = new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Borrar look")
+                .setMessage("Está seguro que desea borrar el siguiente look?")
+                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        deleteLook();
+                        dialog.dismiss();
+                    }
+
+                })
+
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myAskDeleteDialog;
+
+    }
+
+
+    /**
+     * Method we'll call for deleting a garment. We'll send a delete Request to the server by a given garmentId.
+     */
+    public void deleteLook() {
+
+        mAPIService = ApiUtils.getAPIService();
+
+        Call<Look> call = mAPIService.deleteLook(look.getId());
+
+        call.enqueue(new Callback<Look>() {
+            @Override
+            public void onResponse(Call<Look> call, Response<Look> response) {
+
+                Toast.makeText(getApplicationContext(), "DELETED CORRECTLY", Toast.LENGTH_LONG).show();
+
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<Look> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
 }

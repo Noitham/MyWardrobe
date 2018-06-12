@@ -412,7 +412,7 @@ public class NewLookActivity extends AppCompatActivity {
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(),
-                                    "Ya existe un look para el día seleccionado", Toast.LENGTH_SHORT)
+                                    "Ya existe un look para el día de hoy", Toast.LENGTH_SHORT)
                                     .show();
                         }
                         finish();
@@ -421,7 +421,7 @@ public class NewLookActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<Look> call, Throwable t) {
                         Toast.makeText(getApplicationContext(),
-                                "Ya existe un look para el día seleccionado", Toast.LENGTH_SHORT)
+                                "Ya existe un look para el día de hoy", Toast.LENGTH_SHORT)
                                 .show();
                     }
                 });

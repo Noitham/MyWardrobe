@@ -88,7 +88,7 @@ public interface APIService {
     @DELETE("garments/{id}/")
     Call<Garment> deleteGarment(@Path("id") Integer id);
 
-    // Deletes an existing garment by the given id
+    // Deletes an existing look by the given id
     @DELETE("looks/{id}/")
     Call<Look> deleteLook(@Path("id") String id);
 

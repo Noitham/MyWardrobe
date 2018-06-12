@@ -230,8 +230,69 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CHECK_RESULT_ACTIVITY && resultCode == RESULT_CANCELED) {
-            Toast.makeText(getContext(), "No existe look para ese día", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "No existe look para ese día", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // Declare new Gson
+        Gson gson = new Gson();
+        // Declare SharedPreferences variable so we can acced to our SharedPreferences
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), getActivity().MODE_PRIVATE);
+
+        // We build a User from our given information from the sharedPref file (User in Gson format)
+        User mUser = gson.fromJson(sharedPref.getString("user", ""), User.class);
+
+        // We'll introduce our username to our query, so we obtain the looks from the loged in user.
+        HashMap query = new HashMap();
+        query.put("username", mUser.getEmail());
+
+        APIService api = ApiUtils.getAPIService();
+        Call<List<Look>> call = api.getLooks(query);
+
+        call.enqueue(new Callback<List<Look>>() {
+            @Override
+            public void onResponse(Call<List<Look>> call, Response<List<Look>> response) {
+
+                // We obtain our looks from the call
+                List<Look> looks = response.body();
+
+                // We build a list of events (where we'll add the icon, in case there's a look for that day).
+                List<EventDay> events = new ArrayList<>();
+
+                DateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+
+                // In case looks is not null
+                if (looks != null && looks.size() > 0) {
+                    for (int i = 0; i < looks.size(); i++) {
+                        Calendar calendar = Calendar.getInstance();
+                        try {
+                            // We'll get the date
+                            Date date = format.parse(looks.get(i).getDate());
+                            calendar.setTime(date);
+                            // Set the hanger icon for that day
+                            events.add(new EventDay(calendar, R.drawable.icon_hanger));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+                // Finally we set the events to our CalendarView.
+                mCalendarView.setEvents(events);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Look>> call, Throwable t) {
+                Log.d("Error: ", "Connection failed");
+            }
+        });
+
+    }
+
 
 }
