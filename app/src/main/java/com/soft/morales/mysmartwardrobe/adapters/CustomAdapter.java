@@ -92,7 +92,7 @@ public class CustomAdapter extends BaseAdapter {
             // images
             options.inSampleSize = 20;
 
-            Uri myUri = Uri.parse(row_pos.getPhoto().getPath());
+            Uri myUri = Uri.parse(row_pos.getPhoto().toString());
 
             holder.garmentPic.setScaleType(ImageView.ScaleType.FIT_CENTER);
             holder.garmentPic.getLayoutParams().width = 200;

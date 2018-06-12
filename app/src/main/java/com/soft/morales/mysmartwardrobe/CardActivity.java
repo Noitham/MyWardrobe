@@ -22,6 +22,7 @@ import com.soft.morales.mysmartwardrobe.model.User;
 import com.soft.morales.mysmartwardrobe.model.persist.APIService;
 import com.soft.morales.mysmartwardrobe.model.persist.ApiUtils;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class CardActivity extends AppCompatActivity {
     TextView txtName, txtCategory, txtSeason, txtPrice, txtColor, txtSize, txtBrand;
     ImageView imageView;
     Button deleteButton;
-    String garmentId, date, URI;
+    Integer garmentId;
+    String date, URI;
     int pos;
 
     private APIService mAPIService;
@@ -75,7 +77,7 @@ public class CardActivity extends AppCompatActivity {
         Bundle mbundle = this.getIntent().getExtras();
 
         URI = mbundle.getString("Foto");
-        garmentId = mbundle.getString("ID");
+        garmentId = mbundle.getInt("ID");
         pos = mbundle.getInt("pos");
 
         // We get the data from the bundle and we fill it into the field.
@@ -149,9 +151,9 @@ public class CardActivity extends AppCompatActivity {
                         int id2 = looks.get(j).getGarmentsIds().get(1);
                         int id3 = looks.get(j).getGarmentsIds().get(2);
 
-                        if (garmentId.equalsIgnoreCase(String.valueOf(id1))
-                                || garmentId.equalsIgnoreCase(String.valueOf(id2))
-                                || garmentId.equalsIgnoreCase(String.valueOf(id3))) {
+                        if (garmentId == id1
+                                || garmentId == id2
+                                || garmentId == id3) {
 
                             deleteLook(looks.get(j).getId());
 

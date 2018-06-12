@@ -42,10 +42,11 @@ public class NewLookActivity extends AppCompatActivity {
     private static final int FOTO_REQUEST = 456;
 
     // We define our components
-    android.support.design.widget.FloatingActionButton buttonCreateLook, butonDelete, buttonFavourite;
+    android.support.design.widget.FloatingActionButton buttonCreateLook, butonDelete;
     ImageView imgTorso, imgLegs, imgFeets;
     Intent intent2, intent3;
-    private String idShirt, idLegs, idFeet, type, foto;
+    private String type, foto;
+    private Integer idShirt, idLegs, idFeet;
     String myString = null;
 
     private APIService mAPIService;
@@ -74,10 +75,6 @@ public class NewLookActivity extends AppCompatActivity {
 
         butonDelete = (android.support.design.widget.FloatingActionButton) findViewById(R.id.deleteLook);
         buttonCreateLook = (android.support.design.widget.FloatingActionButton) findViewById(R.id.addLook);
-        buttonFavourite = (android.support.design.widget.FloatingActionButton) findViewById(R.id.makeFavourite);
-
-        // We hide the favourite button (it's not required/used in this activity).
-        buttonFavourite.hide();
 
         // We set the listener to our torso.
         imgTorso.setOnClickListener(new FloatingActionButton.OnClickListener() {
@@ -333,15 +330,15 @@ public class NewLookActivity extends AppCompatActivity {
 
             // We get the stored data from the SharedPreferences.
             SharedPreferences shared = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            idShirt = shared.getString("idShirt", "");
-            idLegs = shared.getString("idLegs", "");
-            idFeet = shared.getString("idFeet", "");
+            idShirt = shared.getInt("idShirt", 0);
+            idLegs = shared.getInt("idLegs", 0);
+            idFeet = shared.getInt("idFeet", 0);
 
             // We create our list of garments URI's (type integer).
             List<Integer> myGarments = new ArrayList<>();
 
             // When the type of T-shirt matches to the location of the garment, we'll set it into the ImageView.
-            if (type.equalsIgnoreCase("Camiseta") || type.equalsIgnoreCase("Jersey") || type.equalsIgnoreCase("Chaqueta") || type.equalsIgnoreCase("Shirt")) {
+            if (type.equalsIgnoreCase("Camiseta")) {
                 Glide.with(this).load(Uri.parse(foto)).into(imgTorso);
             } else if (type.equalsIgnoreCase("Legs")) {
                 Glide.with(this).load(Uri.parse(foto)).into(imgLegs);
@@ -349,26 +346,30 @@ public class NewLookActivity extends AppCompatActivity {
                 Glide.with(this).load(Uri.parse(foto)).into(imgFeets);
             }
 
+
             // We prove that the obtained URI is not null (defValue was "").
             // In case it's not null, we add the URI into our list of Garments.
             // If it's null, we'll show a message to the user asking to complete the look.
-            if (!idShirt.equals("")) {
-                myGarments.add(Integer.parseInt(idShirt));
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Porfavor, completa el look antes de guardarlo", Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-            if (!idLegs.equals("")) {
-                myGarments.add(Integer.parseInt(idLegs));
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Porfavor, completa el look antes de guardarlo", Toast.LENGTH_SHORT)
-                        .show();
-            }
-            if (!idFeet.equals("")) {
-                myGarments.add(Integer.parseInt(idFeet));
+            if (!idShirt.equals(0)) {
+                myGarments.add(idShirt);
+                if (myGarments.size() == 1) {
+                    if (!idLegs.equals(0)) {
+                        myGarments.add(idLegs);
+                        if (myGarments.size() == 2) {
+                            if (!idFeet.equals(0)) {
+                                myGarments.add(idFeet);
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Porfavor, completa el look antes de guardarlo", Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Porfavor, completa el look antes de guardarlo", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
             } else {
                 Toast.makeText(getApplicationContext(),
                         "Porfavor, completa el look antes de guardarlo", Toast.LENGTH_SHORT)
@@ -377,6 +378,8 @@ public class NewLookActivity extends AppCompatActivity {
 
             // Once we've obtained 3 different garments into our List of URI's, we'll send the cretelook post.
             if (myGarments.size() == 3) {
+
+                Log.d("lista",myGarments.toString());
 
                 // Declare new Gson
                 Gson gson = new Gson();

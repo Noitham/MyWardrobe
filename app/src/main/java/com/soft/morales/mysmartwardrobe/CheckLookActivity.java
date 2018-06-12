@@ -42,7 +42,7 @@ public class CheckLookActivity extends AppCompatActivity {
 
     // Defining our variables
     ImageView imgTorso, imgLegs, imgFeets;
-    android.support.design.widget.FloatingActionButton buttonCreateLook, butonDelete, buttonFavourite;
+    android.support.design.widget.FloatingActionButton buttonCreateLook, butonDelete;
 
     private User mUser;
     Look look;
@@ -74,7 +74,6 @@ public class CheckLookActivity extends AppCompatActivity {
         // We'll identify our buttons from the view
         butonDelete = (android.support.design.widget.FloatingActionButton) findViewById(R.id.deleteLook);
         buttonCreateLook = (android.support.design.widget.FloatingActionButton) findViewById(R.id.addLook);
-        buttonFavourite = (android.support.design.widget.FloatingActionButton) findViewById(R.id.makeFavourite);
 
         // We'll hide our buttons in the current activity
         butonDelete.hide();
@@ -88,16 +87,6 @@ public class CheckLookActivity extends AppCompatActivity {
         // We call the method that will return us the look for the given day.
         getLook();
 
-        // Setting up the listener for our add to favourite button.
-        buttonFavourite.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-
-                AlertDialog diaBox = askMakeFavourite();
-
-                diaBox.show();
-
-            }
-        });
 
     }
 
@@ -242,41 +231,6 @@ public class CheckLookActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-    }
-
-    /**
-     * AlertDialog that will ask the user whether make the look favourite or not.
-     *
-     * @return myQuittingDialogBox
-     */
-    private AlertDialog askMakeFavourite() {
-
-        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
-                //set message, title, and icon
-                .setTitle("Hacer favorito")
-                .setMessage("Está seguro que desea marcar el look como favorito?")
-                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        //TODO
-
-                    }
-
-                })
-
-                .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-
-        return myQuittingDialogBox;
-
     }
 
 }

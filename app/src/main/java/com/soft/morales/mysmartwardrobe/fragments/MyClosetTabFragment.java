@@ -200,20 +200,20 @@ public class MyClosetTabFragment extends Fragment {
             Intent intent = new Intent(getActivity(), NewLookActivity.class);
             Bundle bundle = new Bundle();
 
-            bundle.putString("Foto", garment.getPhoto().getPath());
+            bundle.putString("Foto", garment.getPhoto().toString());
 
             if (pos == 1 || pos == 3 || pos == 4) {
                 bundle.putString("garmentType", "Shirt");
                 SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                sharedPref.edit().putString("idShirt", garment.getId()).apply();
+                sharedPref.edit().putInt("idShirt", garment.getId()).apply();
             } else if (pos == 2) {
                 bundle.putString("garmentType", "Legs");
                 SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                sharedPref.edit().putString("idLegs", garment.getId()).apply();
+                sharedPref.edit().putInt("idLegs", garment.getId()).apply();
             } else if (pos == 5) {
                 bundle.putString("garmentType", "Feet");
                 SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                sharedPref.edit().putString("idFeet", garment.getId()).apply();
+                sharedPref.edit().putInt("idFeet", garment.getId()).apply();
             }
 
             // We introduce into the bundle the information from the selected garment.
@@ -230,9 +230,9 @@ public class MyClosetTabFragment extends Fragment {
             Intent intent = new Intent(getActivity(), CardActivity.class);
 
             Bundle bundle = new Bundle();
-            bundle.putString("ID", garment.getId());
+            bundle.putInt("ID", garment.getId());
             bundle.putString("Nombre", garment.getName());
-            bundle.putString("Foto", garment.getPhoto().getPath());
+            bundle.putString("Foto", garment.getPhoto().toString());
             bundle.putString("Categoria", garment.getCategory());
             bundle.putString("Temporada", garment.getSeason());
             bundle.putString("Precio", garment.getPrice());

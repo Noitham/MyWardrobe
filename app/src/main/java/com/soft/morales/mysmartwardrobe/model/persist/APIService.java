@@ -84,7 +84,7 @@ public interface APIService {
 
     // Deletes an existing garment by the given id
     @DELETE("garments/{id}/")
-    Call<Garment> deleteGarment(@Path("id") String id);
+    Call<Garment> deleteGarment(@Path("id") Integer id);
 
     // Deletes an existing garment by the given id
     @DELETE("looks/{id}/")
@@ -93,14 +93,14 @@ public interface APIService {
     // For uploading picture
     @Multipart
     @POST("garments/")
-    Call<ResponseBody> postImage(@Part("name") String name,
-                                 @Part MultipartBody.Part image, @Part("name") RequestBody nameImage,
-                                 @Part("category") String category,
-                                 @Part("season") String season,
-                                 @Part("price") String price,
-                                 @Part("username") String username,
-                                 @Part("color") String color,
-                                 @Part("size") String size,
-                                 @Part("brand") String brand);
+    Call<ResponseBody> postImage(@Part("name") RequestBody name,
+                                 @Part MultipartBody.Part image,
+                                 @Part("category") RequestBody category,
+                                 @Part("season") RequestBody season,
+                                 @Part("price") RequestBody price,
+                                 @Part("username") RequestBody username,
+                                 @Part("color") RequestBody color,
+                                 @Part("size") RequestBody size,
+                                 @Part("brand") RequestBody brand);
 
 }

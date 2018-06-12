@@ -56,8 +56,7 @@
 
             <!--id, name, photo, category, season, price, color, size, brand -->
 
-
-            <!-- Brand Label -->
+            <!-- Name Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +86,7 @@
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
-            <!-- Brand Label -->
+            <!-- Price Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,6 +98,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Precio"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <!-- Color Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="20dp">
+
+                <EditText
+                    android:id="@+id/input_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Color"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
@@ -116,21 +131,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="20dp" />
-
-            <!-- Brand Label -->
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="20dp">
-
-                <EditText
-                    android:id="@+id/input_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Color"
-                    android:inputType="text" />
-            </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner_size"

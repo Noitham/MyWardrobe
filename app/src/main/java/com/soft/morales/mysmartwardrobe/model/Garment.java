@@ -10,13 +10,13 @@ public class Garment {
     // Garment attributes variables
     @SerializedName("id")
     @Expose
-    private String id;
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("photo")
     @Expose
-    private File photo;
+    private String photo;
     @SerializedName("category")
     @Expose
     private String category;
@@ -49,7 +49,7 @@ public class Garment {
         this.brand = garment.brand;
     }
 
-    public Garment(String name, File photo, String category, String brand) {
+    public Garment(String name, String photo, String category, String brand) {
         this.name = name;
         this.photo = photo;
         this.category = category;
@@ -58,11 +58,11 @@ public class Garment {
 
     // Accessors
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -74,11 +74,11 @@ public class Garment {
         this.name = name;
     }
 
-    public File getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(File photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 

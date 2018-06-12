@@ -52,6 +52,8 @@ import com.soft.morales.mysmartwardrobe.model.persist.ApiUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -74,13 +76,12 @@ public class NewGarmentActivity extends AppCompatActivity {
     // Activity request codes
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int PICK_IMAGE = 100;
 
     // directory name to store captured images and videos
     private static final String IMAGE_DIRECTORY_NAME = "My Smart Wardrobe";
 
     private Uri fileUri; // file url to store image/video
-    File file;
+    private File fileImage;
 
     private ImageView imgPreview; // img preview
 
@@ -100,8 +101,7 @@ public class NewGarmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_garment);
-
-
+        
         // UPLOAD PICTURE TO SERVER
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -194,8 +194,6 @@ public class NewGarmentActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Garment> call, Throwable t) {
 
-                file = new File(fileUri.getPath());
-
                 String name = textName.getText().toString().trim();
                 String category = spinnerCategory.getSelectedItem().toString();
                 String season = spinnerSeason.getSelectedItem().toString();
@@ -235,15 +233,25 @@ public class NewGarmentActivity extends AppCompatActivity {
         // We build a User from our given information from the sharedPref file (User in Gson format)
         User user = gson.fromJson(sharedPref.getString("user", ""), User.class);
 
+        try {
+            fileImage = new File(new URI(fileUri.toString()));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-        file = new File(fileUri.getPath());
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("photo", fileImage.getName(), RequestBody.create(MediaType.parse("image/*"), fileImage));
 
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-        RequestBody nameImage = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
+        RequestBody nameRequest = RequestBody.create(MediaType.parse("text/plain"), name);
+        RequestBody categoryRequest = RequestBody.create(MediaType.parse("text/plain"), category);
+        RequestBody seasonRequest = RequestBody.create(MediaType.parse("text/plain"), season);
+        RequestBody priceRequest = RequestBody.create(MediaType.parse("text/plain"), price);
+        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"), user.getEmail());
+        RequestBody colorRequest = RequestBody.create(MediaType.parse("text/plain"), color);
+        RequestBody sizeRequest = RequestBody.create(MediaType.parse("text/plain"), size);
+        RequestBody brandRequest = RequestBody.create(MediaType.parse("text/plain"), brand);
 
 
-        retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(name, body, nameImage, category, season, price, user.getEmail(), color, size, brand);
+        retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(nameRequest, filePart, categoryRequest, seasonRequest, priceRequest, emailRequest, colorRequest, sizeRequest, brandRequest);
 
         req.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -494,29 +502,6 @@ public class NewGarmentActivity extends AppCompatActivity {
             }
         }
     }
-
-    /**
-     * private void uploadPicture() {
-     * <p>
-     * file = new File(fileUri.getPath());
-     * <p>
-     * RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-     * MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-     * RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
-     * <p>
-     * Log.d("THIS", fileUri.getPath());
-     * <p>
-     * retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(body, name);
-     * req.enqueue(new Callback<ResponseBody>() {
-     *
-     * @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-     * }
-     * @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
-     * t.printStackTrace();
-     * }
-     * });
-     * }
-     */
 
     /*
      * Display image from a path to ImageView
